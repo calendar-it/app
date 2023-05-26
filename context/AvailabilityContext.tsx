@@ -60,7 +60,7 @@ const StateSetContext = createContext<Dispatch<ActionType> | undefined>(
 const StateContext = createContext<StateType>({
   duration: ALLOWED_DURATIONS[0],
   start: Day.todayWithOffset(0),
-  end: Day.todayWithOffset(14),
+  end: Day.todayWithOffset(21),
   timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   modal: "closed",
 })
