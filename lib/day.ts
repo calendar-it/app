@@ -7,7 +7,8 @@ export default class Day {
   public constructor(
     private readonly year: number,
     private readonly month: number,
-    private readonly day: number
+    private readonly day: number,
+    private readonly options?: object
   ) {
     Day.validateYearMonthDay(year, month, day)
   }
@@ -73,7 +74,8 @@ export default class Day {
    * @throws {TypeError} If the input string is not in the expected format.
    */
   public static dayFromString(input: string): Day {
-    const [year, month, day] = input.split("-").map(Number)
+    const [date, time] = input.split("T")
+    const [year, month, day] = date.split("-").map(Number)
 
     if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) {
       throw new TypeError(`Invalid date string: ${input}`)

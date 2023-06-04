@@ -4,6 +4,7 @@ import type {
 } from "next"
 import { useEffect } from "react"
 import { z } from "zod"
+import { utcToZonedTime, format } from "date-fns-tz"
 
 import Template from "@/components/Template"
 import AvailabilityPicker from "@/components/availability/AvailabilityPicker"
@@ -34,6 +35,9 @@ function Page({
     state: { duration, selectedDate },
     dispatch,
   } = useProvider()
+
+  console.log("start:", start)
+  console.log("end", end)
 
   const startDay = Day.dayFromString(start)
   const endDay = Day.dayFromString(end)
@@ -98,6 +102,19 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   const start = Day.todayWithOffset(0)
   const end = Day.todayWithOffset(14)
 
+  console.log("backend start:", start.toString())
+  console.log("backend end:  ", end.toString())
+  // const startString = start.toString()
+  // const endString = end.toString()
+
+  const startIntervalStart = start.toInterval().start.toISOString()
+  const endIntervalEnd = end.toInterval().end.toISOString()
+
+  // const startNow 
+
+  // console.log(startString, endString)
+  // console.log(startIntervalStart, endIntervalEnd)
+
   const busy = await getBusyTimes(
     getDateRangeInterval({
       start,
@@ -108,8 +125,10 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
 
   return {
     props: {
-      start: start.toString(),
-      end: end.toString(),
+      // start: start.toString(),
+      // end: end.toString(),
+      start: startIntervalStart,
+      end: endIntervalEnd,
       busy: mapDatesToStrings(busy),
       duration,
       ...(timeZone && { timeZone }),

@@ -9,11 +9,13 @@ export default function getPotentialTimes({
   end,
   duration,
   availabilitySlots,
+  timeZone,
 }: {
-  start: Day
-  end: Day
-  duration: number
-  availabilitySlots: AvailabilitySlotsMap
+  start: Day,
+  end: Day,
+  duration: number,
+  availabilitySlots: AvailabilitySlotsMap,
+  timeZone?: string,
 }): DateTimeInterval[] {
   const intervals: DateTimeInterval[] = []
 
@@ -22,10 +24,15 @@ export default function getPotentialTimes({
   }
 
   // Sort the slots by start time
-  const days = eachDayOfInterval({
+  const days = timeZone ? eachDayOfInterval({
+    start: start.toInterval(timeZone).start,
+    end: end.toInterval(timeZone).end,
+  })
+  : eachDayOfInterval({
     start: start.toInterval().start,
     end: end.toInterval().end,
   })
+  
   days.forEach((day) => {
     const dayOfWeek = day.getDay()
 
