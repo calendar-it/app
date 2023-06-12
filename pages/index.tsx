@@ -11,6 +11,7 @@ import {
   ALLOWED_DURATIONS,
   DEFAULT_DURATION,
   OWNER_AVAILABILITY,
+  OWNER_TIMEZONE
 } from "@/config"
 import { useProvider, withProvider } from "@/context/AvailabilityContext"
 import getAvailability from "@/lib/availability/getAvailability"
@@ -29,6 +30,7 @@ function Page({
   start,
   end,
   busy,
+  timeZone
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const {
     state: { duration, selectedDate },
@@ -37,6 +39,9 @@ function Page({
 
   const startDay = Day.dayFromString(start)
   const endDay = Day.dayFromString(end)
+
+  console.log("props", {start, end, busy, timeZone}, "useProvider", {duration, selectedDate})
+  console.log("start/end day", {startDay, endDay})
 
   const potential = getPotentialTimes({
     start: startDay,
@@ -50,13 +55,17 @@ function Page({
     potential,
   })
 
+  console.log("potential", potential) //Date /w timezone
+  console.log("offers", offers)
+
   const slots = offers.filter((slot) => {
     return (
-      slot.start >= startDay.toInterval().start &&
-      slot.end <= endDay.toInterval().end
+      slot.start >= startDay.toInterval(OWNER_TIMEZONE).start &&
+      slot.end <= endDay.toInterval(OWNER_TIMEZONE).end
     )
   })
 
+  console.log("slots", slots)
   // If we got this far and there's no selectedDate, set it to the first date
   // with some availability.
   useEffect(() => {
@@ -99,8 +108,8 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   const end = Day.todayWithOffset(14)
 
   const busy = await getBusyTimes(
-    getDateRangeInterval({
-      start,
+    getDateRangeInterval({ 
+      start, 
       end,
       timeZone,
     })

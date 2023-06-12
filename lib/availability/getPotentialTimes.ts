@@ -4,6 +4,8 @@ import type Day from "../day"
 import type { AvailabilitySlotsMap, DateTimeInterval } from "../types"
 import mergeOverlappingIntervals from "./mergeOverlappingIntervals"
 
+import { OWNER_TIMEZONE } from "../../config"
+
 export default function getPotentialTimes({
   start,
   end,
@@ -23,8 +25,8 @@ export default function getPotentialTimes({
 
   // Sort the slots by start time
   const days = eachDayOfInterval({
-    start: start.toInterval().start,
-    end: end.toInterval().end,
+    start: start.toInterval(OWNER_TIMEZONE).start,
+    end: end.toInterval(OWNER_TIMEZONE).end,
   })
   days.forEach((day) => {
     const dayOfWeek = day.getDay()
