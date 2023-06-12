@@ -40,8 +40,8 @@ function Page({
   const startDay = Day.dayFromString(start)
   const endDay = Day.dayFromString(end)
 
-  console.log("props", {start, end, busy, timeZone}, "useProvider", {duration, selectedDate})
-  console.log("start/end day", {startDay, endDay})
+  // console.log("props", {start, end, busy, timeZone}, "useProvider", {duration, selectedDate})
+  // console.log("start/end day", {startDay, endDay})
 
   const potential = getPotentialTimes({
     start: startDay,
@@ -55,8 +55,8 @@ function Page({
     potential,
   })
 
-  console.log("potential", potential) //Date /w timezone
-  console.log("offers", offers)
+  // console.log("potential", potential) //Date /w timezone
+  // console.log("offers", offers)
 
   const slots = offers.filter((slot) => {
     return (
@@ -65,7 +65,8 @@ function Page({
     )
   })
 
-  console.log("slots", slots)
+  // console.log("slots", slots)
+
   // If we got this far and there's no selectedDate, set it to the first date
   // with some availability.
   useEffect(() => {
